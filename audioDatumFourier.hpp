@@ -13,11 +13,11 @@ class audioDatumFourier
     int channels;
 
     std::complex<float> get_fourier_series_coefficient(float* time_samples, int idx);
-    float get_inverse_fourier_series_sample(float* fourier_coefficients, int idx);
+    float get_inverse_fourier_series_sample(std::complex<float>* fourier_coefficients, int idx);
   public:
-    audioDatumFourier(audioDatum datum);
+    audioDatumFourier(audioDatum& datum);
     audioDatumFourier();
-    storeData(audioDatum datum);
+    //storeData(audioDatum datum);
     ~audioDatumFourier();
 
     audioDatum getTimeDomainSignal();

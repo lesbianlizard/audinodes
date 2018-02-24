@@ -1,6 +1,6 @@
-#include <audioDatumFourier.hpp>
-#include <math.h>
+#include "audioDatumFourier.hpp"
 #include <complex>
+#include <math.h>
 
 audioDatumFourier::audioDatumFourier()
 {
@@ -18,7 +18,7 @@ audioDatumFourier::audioDatumFourier(audioDatum& datum)
 
   for (int i = 0; i < this->channels; i++)
   {
-    this->data[i] = new complex<float>[this->samples];
+    this->data[i] = new std::complex<float>[this->samples];
   }
 
   for (int i = 0; i < this->channels; i++)
@@ -36,17 +36,17 @@ std::complex<float> audioDatumFourier::get_fourier_series_coefficient(float* tim
 
   for (int n = 0; n < this->samples; n++)
   {
-    sum += time_samples[n] * std::exp(i * idx * 2 * M_PI * n / this->samples);
+    sum += time_samples[n] * std::exp(1i * idx * 2 * M_PI * n / this->samples);
   }
 }
 
-float audioDatumFourier::get_inverse_fourier_series_sample(float* fourier_coefficients, int idx)
+float audioDatumFourier::get_inverse_fourier_series_sample(std::complex<float>* fourier_coefficients, int idx)
 {
   std::complex<float> sum = 0; 
 
-  for (int k = 0; k i < this->samples; k++)
+  for (int k = 0; k < this->samples; k++)
   {
-    sum += fourier_coefficients[k] * std::exp(i * k * 2 * M_PI * idx / this->samples);
+    sum += fourier_coefficients[k] * std::exp(1i * k * 2 * M_PI * idx / this->samples);
   }
 
   return sum.real();
@@ -60,11 +60,11 @@ audioDatum audioDatumFourier::getTimeDomainSignal()
   datum.setChannels(this->channels);
   datum.setLength(this->samples);
 
-  for (int i = 0; i < this->n_channels; i++)
+  for (int i = 0; i < this->channels; i++)
   {
     for(unsigned int j = 0; j < this->samples; j++)
     {
-      datum.setSample(i, j, this->get_inverse_fourier_series_sample(this->data[i], j))
+      datum.setSample(i, j, this->get_inverse_fourier_series_sample(this->data[i], j));
     }
   }
 }
