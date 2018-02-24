@@ -22,7 +22,7 @@ void fileReader::execute() {
 
 	//debug
 	printf("\n read file '%s':\n", this->filepath.c_str());
-	printf("samples: %i\n", sf_info.frames);
+	printf("samples: %li\n", sf_info.frames);
 	printf("sample rate: %i\n", sf_info.samplerate);
 	printf("channels: %i\n\n", sf_info.channels);
 
