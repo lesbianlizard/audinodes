@@ -15,6 +15,7 @@ class audioDatum {
 
 
 		void setLength(const unsigned int samples);
+		float* getInterleavedData(void);
 };
 
 #endif

@@ -2,12 +2,13 @@
 #define SINK_HPP
 
 #include "node.hpp"
-#include "sound.hpp"
+#include "audioDatum.hpp"
 
 class Sink : public Node {
+	protected:
+		audioDatum* input;
 	public:
-		void setInput(std::string);
-
+		void setInput(audioDatum*);
 };
 
 #endif
