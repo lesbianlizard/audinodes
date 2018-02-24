@@ -14,6 +14,17 @@ void audioDatum::setLength(const unsigned int samples) {
 	}
 }
 
+float* audioDatum::getInterleavedData() {
+	unsigned int sndsize = this->samples * this->channels;
+	float* buf = new float[sndsize];
+	for (unsigned int i=0; i<this->samples; i++) {
+		for (int c=0; c<this->channels; c++) { //c++ :O
+			buf[i*2+c] = this->data[c][i];
+		}
+	}
+	return buf;
+}
+
 // call default constructor when constructing with known sample count
 // see https://en.wikipedia.org/wiki/C%2B%2B11#Object_construction_improvement
 audioDatum::audioDatum(const unsigned int samples) : audioDatum() {
@@ -21,6 +32,7 @@ audioDatum::audioDatum(const unsigned int samples) : audioDatum() {
 }
 
 audioDatum::audioDatum() {
+	fprintf(stderr, "constructing audiodatum\n");
 	this->channels = 2;
 }
 

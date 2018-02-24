@@ -26,7 +26,7 @@ class audioDatum {
     void setSample(int channel; unsigned int sample_idx, float sample);
     
 
-    
+		float* getInterleavedData(void);
 };
 
 #endif

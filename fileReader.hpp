@@ -10,7 +10,7 @@ class fileReader : public Source {
 		std::string filepath;
 
 	public:
-		audioDatum sound;//TODO: protected, public for testing
+		// audioDatum sound;//TODO: protected, public for testing
 		fileReader(const char* filepath);
 		void execute(void);
 
