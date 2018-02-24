@@ -6,6 +6,7 @@ int main(int argc, char* argv[]) {
 
 	fileReader reader(argv[1]);
 	reader.execute();
-	exit(EXIT_SUCCESS);
+
+	printf("value outside of execute: %f\n", reader.sound.data[0][0]);
 
 }
