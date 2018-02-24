@@ -28,21 +28,23 @@ void fileReader::execute() {
 
 	this->sound.samples = sf_info.frames;
 	this->sound.samplerate = sf_info.samplerate;
-	// this->sound.channels = sf_info.channels;
+	this->sound.channels = sf_info.channels;
 	this->sound.setLength(sf_info.frames);
 
 	unsigned int sndsize = sf_info.frames * sf_info.channels;
-	float snddata[sndsize];
+	float* snddata = new float[sndsize];
 
 	sf_count_t samples_read = sf_read_float(file, snddata, sndsize);
 	sf_close(file);
 
 	for (unsigned long i=0; i<sf_info.frames; i++) {
 		for (int c=0; c<sf_info.channels; c++) { //c++ :O
-			this->sound.data[c][i] = snddata[i+c];
+			this->sound.data[c][i] = snddata[2*i+c];
 		}
 	}
 
+
 	printf("value inside execute: %f\n", this->sound.data[0][0]);
+  delete[] snddata;
 
 }

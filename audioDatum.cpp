@@ -19,7 +19,7 @@ float* audioDatum::getInterleavedData() {
 	float* buf = new float[sndsize];
 	for (unsigned int i=0; i<this->samples; i++) {
 		for (int c=0; c<this->channels; c++) { //c++ :O
-			buf[i+c] = this->data[c][i];
+			buf[i*2+c] = this->data[c][i];
 		}
 	}
 	return buf;
