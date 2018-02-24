@@ -15,14 +15,23 @@ void audioDatum::setLength(const unsigned int samples) {
 }
 
 float* audioDatum::getInterleavedData() {
-	unsigned int sndsize = this->samples * this->channels;
+	int c = this->channels;
+	unsigned int sndsize = this->samples * c;
 	float* buf = new float[sndsize];
-	for (unsigned int i=0; i<this->samples; i++) {
-		for (int c=0; c<this->channels; c++) { //c++ :O
-			buf[i+c] = this->data[c][i];
-		}
+
+	for (unsigned int i=0; i<sndsize; i++) {
+		buf[i] = this->data[i%c][i/c];
 	}
 	return buf;
+}
+
+void audioDatum::putInterleavedData(const float* buf) {
+	int c = this->channels;
+	unsigned int sndsize = this->samples * c;
+
+	for (unsigned int i=0; i<sndsize; i++) {
+		this->data[i%c][i/c] = buf[i];
+	}
 }
 
 // call default constructor when constructing with known sample count
