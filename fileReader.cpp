@@ -28,7 +28,7 @@ void fileReader::execute() {
 
 	this->sound.samples = sf_info.frames;
 	this->sound.samplerate = sf_info.samplerate;
-	// this->sound.channels = sf_info.channels;
+	this->sound.channels = sf_info.channels;
 	this->sound.setLength(sf_info.frames);
 
 	unsigned int sndsize = sf_info.frames * sf_info.channels;
