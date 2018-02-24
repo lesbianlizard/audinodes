@@ -8,7 +8,12 @@ void fileWriter::Write() {
 	sf_info.frames     = this->input->samples;
 	sf_info.samplerate = this->input->samplerate;
 	sf_info.channels   = this->input->channels;
-	sf_info.format     = SF_FORMAT_FLAC | SF_FORMAT_FLOAT;
+	sf_info.format     = SF_FORMAT_FLAC | SF_FORMAT_PCM_24;
+	sf_info.sections   = 0;
+	sf_info.seekable   = 0;
+	// sf_info.format     = SF_FORMAT_FLAC | SF_FORMAT_FLOAT;
+
+	printf("is format ok? %i\n", sf_format_check(&sf_info));
 
 	SNDFILE* file = sf_open(this->filepath.c_str(), SFM_WRITE, &sf_info);
 
