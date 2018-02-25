@@ -1,8 +1,11 @@
 #include <iostream>
 #include <sndfile.h>
 #include "fileWriter.hpp"
+#include <string>
 
 void fileWriter::Write() {
+  std::string fname = "[fileWriter::Write] ";
+  std::cout << fname << "begin" << std::endl;
 	SF_INFO sf_info;
 
 	sf_info.frames     = this->input->samples;
@@ -17,7 +20,10 @@ void fileWriter::Write() {
 
 	SNDFILE* file = sf_open(this->filepath.c_str(), SFM_WRITE, &sf_info);
 
+  std::cout << fname << "getting interleaved data" << std::endl;
+
 	float* buf = this->input->getInterleavedData();
+  std::cout << fname << "writing file" << std::endl;
 	sf_writef_float(file, buf, this->input->samples);
 
 	sf_close(file);

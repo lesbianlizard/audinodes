@@ -24,7 +24,7 @@ class audioDatum {
     float** getData(); // is this safe?
     float getSample(int channel, unsigned int sample_idx);
     void setSample(int channel, unsigned int sample_idx, float sample);
-    
+    void print_debug(); 
 
 		float* getInterleavedData(void);
 		void putInterleavedData(const float* buf);

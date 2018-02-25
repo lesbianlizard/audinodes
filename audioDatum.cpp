@@ -1,6 +1,7 @@
 #include <vector>
 #include "audioDatum.hpp"
 #include <iostream>
+#include <string>
 
 void audioDatum::setLength(const unsigned int samples) {
 	printf("setting channels: %i\n", this->channels);
@@ -41,7 +42,6 @@ audioDatum::audioDatum(const unsigned int samples) : audioDatum() {
 }
 
 audioDatum::audioDatum() {
-	fprintf(stderr, "constructing audiodatum\n");
 	this->channels = 2;
 }
 
@@ -51,4 +51,65 @@ audioDatum::~audioDatum() {
 		delete[] this->data[i];
 	}
 	delete[] this->data;
+}
+
+unsigned int audioDatum::getSamples()
+{
+  return this->samples;
+}
+
+void audioDatum::setSamples(unsigned int samples)
+{
+  this->samples = samples;
+}
+
+unsigned int audioDatum::getSampleRate()
+{
+  return this->samplerate;
+}
+
+void audioDatum::setSampleRate(unsigned int samplerate)
+{
+  this->samplerate = samplerate;
+}
+
+int audioDatum::getChannels()
+{
+  return this->channels;
+}
+
+void audioDatum::setChannels(int channels)
+{
+  this->channels = channels;
+}
+
+float** audioDatum::getData()
+{
+  return this->data;
+}
+
+float audioDatum::getSample(int channel, unsigned int sample_idx)
+{
+  return this->data[channel][sample_idx];
+}
+
+void audioDatum::setSample(int channel, unsigned int sample_idx, float sample)
+{
+  this->data[channel][sample_idx] = sample;
+}
+
+void audioDatum::print_debug()
+{
+  std::string fname = "[audioDatum::print_debug]: ";
+  std::cout << fname << "samples " << this->samples << std::endl;
+  std::cout << fname << "samplerate " << this->samplerate << std::endl;
+  std::cout << fname << "channels " << this->channels << std::endl;
+  
+  for (int i = 0; i < this->samples; i++)
+  {
+    for (int j = 0; j < this->channels; j++)
+    {
+      std::cout << fname << "sample " << i << " channel " << j << ": " << this->data[j][i] << std::endl;
+    }
+  }
 }
