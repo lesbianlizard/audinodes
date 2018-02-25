@@ -1,6 +1,9 @@
 #include "audioDatumFourier.hpp"
 #include <complex>
 #include <math.h>
+#include <string>
+#include <iostream>
+
 
 audioDatumFourier::audioDatumFourier()
 {
@@ -8,11 +11,12 @@ audioDatumFourier::audioDatumFourier()
   this->channels = 0;
 }
 
-audioDatumFourier::audioDatumFourier(audioDatum& datum)
+audioDatumFourier::audioDatumFourier(audioDatum* datum)
 {
-  float** datum_samples = datum.getData();
-  this->samples = datum.getSamples();
-  this->channels = datum.getChannels();
+  std::string fname = "[audioDatumFourier::audioDatumFourier]: ";
+  float** datum_samples = datum->getData();
+  this->samples = datum->getSamples();
+  this->channels = datum->getChannels();
 
   this->data = new std::complex<float>*[this->channels];
 
@@ -25,7 +29,9 @@ audioDatumFourier::audioDatumFourier(audioDatum& datum)
   {
     for (unsigned int j = 0; j < this->samples; j++)
     {
+      std::cout << fname << "computing fourier coefficient " << j <<  " of " << this->samples <<  std::endl;
       this->data[i][j] = this->get_fourier_series_coefficient(datum_samples[i], j);
+
     }
   }
 }
@@ -36,7 +42,7 @@ std::complex<float> audioDatumFourier::get_fourier_series_coefficient(float* tim
 
   for (int n = 0; n < this->samples; n++)
   {
-    sum += time_samples[n] * std::exp(1i * idx * 2 * M_PI * n / this->samples);
+    sum += time_samples[n] * std::exp(static_cast<std::complex<float> >(1i * idx * 2 * M_PI * n / this->samples));
   }
 }
 
@@ -46,7 +52,7 @@ float audioDatumFourier::get_inverse_fourier_series_sample(std::complex<float>* 
 
   for (int k = 0; k < this->samples; k++)
   {
-    sum += fourier_coefficients[k] * std::exp(1i * k * 2 * M_PI * idx / this->samples);
+    sum += fourier_coefficients[k] * std::exp(static_cast<std::complex<float> >(1i * k * 2 * M_PI * idx / this->samples));
   }
 
   return sum.real();
