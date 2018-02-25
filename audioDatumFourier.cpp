@@ -9,23 +9,24 @@ audioDatumFourier::audioDatumFourier()
 {
   std::string fname = "[audioDatumFourier::audioDatumFourier()]: ";
   this->samplerate = 44100;
-  this->samples = 20;
-  this->channels = 2;
+  this->samples = 40;
+  this->channels = 1;
 
   this->init_data_array();
 
-  for (int j = 0; j < this->samples; j++)
+  for (int i = 0; i < this->channels; i++)
   {
-    std::cout << fname << "setting sample " << j << std::endl;
-    if ((j == this->samples - 1) || ( j == this->samples - 3))
+    for (int j = 0; j < this->samples; j++)
     {
-      this->data[0][j] = 0.5;
-      this->data[1][j] = 0.5;
-    }
-    else
-    {
-      this->data[0][j] = 0;
-      this->data[1][j] = 0;
+      std::cout << fname << "setting sample " << j << std::endl;
+      if ((j == this->samples - 1))
+      {
+        this->data[i][j] = 0.1;
+      }
+      else
+      {
+        this->data[i][j] = 0;
+      }
     }
   }
 }
