@@ -10,10 +10,10 @@ int main(int argc, char* argv[]) {
 //	reader.execute(); //TODO: perform node execution automatically as needed
 
   std::cout << "instantiating audioDatumFourier" << std::endl;
-  audioDatumFourier fourier;
-  audioDatum* datum = fourier.getTimeDomainSignal(1000);
+  audioDatumFourier fourier(50);
+  audioDatum* datum = fourier.getTimeDomainSignal(100);
  // audioDatum* datum = reader.getOutput();
-  datum->print_debug();
+  //datum->print_debug();
 
 	fileWriter writer(argv[2]);
 	writer.setInput(datum);

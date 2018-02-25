@@ -18,7 +18,7 @@ class audioDatumFourier
     void init_data_array(); 
   public:
     audioDatumFourier(audioDatum* datum);
-    audioDatumFourier();
+    audioDatumFourier(int samples);
     //storeData(audioDatum datum);
     ~audioDatumFourier();
 

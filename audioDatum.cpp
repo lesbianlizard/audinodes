@@ -3,6 +3,11 @@
 #include <iostream>
 #include <string>
 
+audioDatum operator+(const audioDatum& datum1, const audioDatum& datum2)
+{
+ audioDatum newdatum;
+}
+
 void audioDatum::setLength(const unsigned int samples) {
 	printf("setting channels: %i\n", this->channels);
 	this->samples = samples;
@@ -13,6 +18,23 @@ void audioDatum::setLength(const unsigned int samples) {
 		printf("setting track %i samples: %i\n", i, samples);
 		this->data[i] = new float[samples];
 	}
+}
+
+audioDatum::audioDatum(const audioDatum& datum)
+{
+  this->samples = datum.getSamples();
+  this->samplerate = datum.getSampleRate();
+  this->channels = datum.getChannels();
+
+  this->setLength(this->samples);
+
+  for (int c = 0; c < this->channels; c++)
+  {
+    for (int s = 0; s < this->samples; s++)
+    {
+      this->data[c][s] = datum.getSample(c, s);
+    }
+  }
 }
 
 float* audioDatum::getInterleavedData() {

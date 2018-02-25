@@ -5,12 +5,12 @@
 #include <iostream>
 
 
-audioDatumFourier::audioDatumFourier()
+audioDatumFourier::audioDatumFourier(int samples)
 {
   std::string fname = "[audioDatumFourier::audioDatumFourier()]: ";
   this->samplerate = 44100;
-  this->samples = 40;
-  this->channels = 1;
+  this->samples = samples;
+  this->channels = 2;
 
   this->init_data_array();
 

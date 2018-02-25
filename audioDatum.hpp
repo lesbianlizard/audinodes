@@ -9,9 +9,10 @@ class audioDatum {
 		float** data; //array of channels, where each channel is an array of samples (floats)
 
 		audioDatum(void);
+		audioDatum(const unsigned int samples);
+    audioDatum(const audioDatum& datum);
 		~audioDatum(void);
 
-		audioDatum(const unsigned int samples);
 		void setLength(const unsigned int samples);
 
 //public:
@@ -28,6 +29,8 @@ class audioDatum {
 
 		float* getInterleavedData(void);
 		void putInterleavedData(const float* buf);
+
+    friend audioDatum operator+(const audioDatum& datum1, const audioDatum& datum2);
 };
 
 #endif
