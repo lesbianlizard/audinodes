@@ -11,7 +11,8 @@ int main(int argc, char* argv[]) {
 
   std::cout << "instantiating audioDatumFourier" << std::endl;
   audioDatumFourier fourier;
-  audioDatum* datum = fourier.getTimeDomainSignal(2);
+  audioDatum* datum = fourier.getTimeDomainSignal(1000);
+ // audioDatum* datum = reader.getOutput();
   datum->print_debug();
 
 	fileWriter writer(argv[2]);

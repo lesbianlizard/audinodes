@@ -95,4 +95,12 @@ void audioDatum::print_debug()
   std::cout << fname << "samples " << this->samples << std::endl;
   std::cout << fname << "samplerate " << this->samplerate << std::endl;
   std::cout << fname << "channels " << this->channels << std::endl;
+  
+  for (int i = 0; i < this->samples; i++)
+  {
+    for (int j = 0; j < this->channels; j++)
+    {
+      std::cout << fname << "sample " << i << " channel " << j << ": " << this->data[j][i] << std::endl;
+    }
+  }
 }
