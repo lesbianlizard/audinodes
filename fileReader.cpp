@@ -22,7 +22,7 @@ void fileReader::execute() {
 
 	//debug
 	printf("\n read file '%s':\n", this->filepath.c_str());
-	printf("samples: %i\n", sf_info.frames);
+	printf("samples: %li\n", sf_info.frames);
 	printf("sample rate: %i\n", sf_info.samplerate);
 	printf("channels: %i\n\n", sf_info.channels);
 
@@ -32,19 +32,14 @@ void fileReader::execute() {
 	this->sound.setLength(sf_info.frames);
 
 	unsigned int sndsize = sf_info.frames * sf_info.channels;
-	float* snddata = new float[sndsize];
 
-	sf_count_t samples_read = sf_read_float(file, snddata, sndsize);
+	float* sndbuf = new float[sndsize];
+	sf_read_float(file, sndbuf, sndsize);
+	this->sound.putInterleavedData(sndbuf);
+
+	delete[] sndbuf;
 	sf_close(file);
 
-	for (unsigned long i=0; i<sf_info.frames; i++) {
-		for (int c=0; c<sf_info.channels; c++) { //c++ :O
-			this->sound.data[c][i] = snddata[2*i+c];
-		}
-	}
-
-
 	printf("value inside execute: %f\n", this->sound.data[0][0]);
-  delete[] snddata;
 
 }

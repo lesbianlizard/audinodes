@@ -27,6 +27,7 @@ class audioDatum {
     void print_debug(); 
 
 		float* getInterleavedData(void);
+		void putInterleavedData(const float* buf);
 };
 
 #endif
