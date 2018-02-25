@@ -1,6 +1,7 @@
 #include <vector>
 #include "audioDatum.hpp"
 #include <iostream>
+#include <string>
 
 void audioDatum::setLength(const unsigned int samples) {
 	printf("setting channels: %i\n", this->channels);
@@ -86,4 +87,12 @@ float audioDatum::getSample(int channel, unsigned int sample_idx)
 void audioDatum::setSample(int channel, unsigned int sample_idx, float sample)
 {
   this->data[channel][sample_idx] = sample;
+}
+
+void audioDatum::print_debug()
+{
+  std::string fname = "[audioDatum::print_debug]: ";
+  std::cout << fname << "samples " << this->samples << std::endl;
+  std::cout << fname << "samplerate " << this->samplerate << std::endl;
+  std::cout << fname << "channels " << this->channels << std::endl;
 }

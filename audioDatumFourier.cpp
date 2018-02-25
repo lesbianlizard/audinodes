@@ -7,23 +7,45 @@
 
 audioDatumFourier::audioDatumFourier()
 {
-  this->samples = 0;
-  this->channels = 0;
+  std::string fname = "[audioDatumFourier::audioDatumFourier()]: ";
+  this->samplerate = 44100;
+  this->samples = 2272;
+  this->channels = 1;
+
+  this->init_data_array();
+
+  for (int j = 0; j < this->samples; j++)
+  {
+    std::cout << fname << "setting sample " << j << std::endl;
+    if (j == this->samples - 1)
+    {
+      this->data[0][j] = 0.5;
+    }
+    else
+    {
+      this->data[0][j] = 0;
+    }
+  }
 }
 
-audioDatumFourier::audioDatumFourier(audioDatum* datum)
+void audioDatumFourier::init_data_array()
 {
-  std::string fname = "[audioDatumFourier::audioDatumFourier]: ";
-  float** datum_samples = datum->getData();
-  this->samples = datum->getSamples();
-  this->channels = datum->getChannels();
-
   this->data = new std::complex<float>*[this->channels];
 
   for (int i = 0; i < this->channels; i++)
   {
     this->data[i] = new std::complex<float>[this->samples];
   }
+}
+
+audioDatumFourier::audioDatumFourier(audioDatum* datum)
+{
+  std::string fname = "[audioDatumFourier::audioDatumFourier(audioDatum* datum)]: ";
+  float** datum_samples = datum->getData();
+  this->samples = datum->getSamples();
+  this->channels = datum->getChannels();
+
+  this->init_data_array();
 
   for (int i = 0; i < this->channels; i++)
   {
@@ -58,19 +80,40 @@ float audioDatumFourier::get_inverse_fourier_series_sample(std::complex<float>* 
   return sum.real();
 }
 
-audioDatum audioDatumFourier::getTimeDomainSignal()
+audioDatum* audioDatumFourier::getTimeDomainSignal(int repetitions)
 {
-  audioDatum datum;  
-  datum.setSamples(this->samples);
-  datum.setSampleRate(this->samplerate);
-  datum.setChannels(this->channels);
-  datum.setLength(this->samples);
+  std::string fname = "[audioDatumFourier::getTimeDomainSignal]: ";
+  std::cout << fname << "begin" << std::endl;
+  audioDatum* datum = new audioDatum;  
+  datum->setSamples(this->samples*repetitions);
+  datum->setSampleRate(this->samplerate);
+  datum->setChannels(this->channels);
+  datum->setLength(this->samples*repetitions);
 
   for (int i = 0; i < this->channels; i++)
   {
     for(unsigned int j = 0; j < this->samples; j++)
     {
-      datum.setSample(i, j, this->get_inverse_fourier_series_sample(this->data[i], j));
+      std::cout << fname << "giving time domain sample " << j << " channel " << i << " to audioDatum" << std::endl;
+      datum->setSample(i, j, this->get_inverse_fourier_series_sample(this->data[i], j));
     }
   }
+
+  for (int k = 1; k < repetitions; k++)
+  {
+    for (int i = 0; i < this->channels; i++)
+    {
+      for(unsigned int j = 0; j < this->samples; j++)
+      {
+        std::cout <<fname << "copying time domain sample" << j << " channel " << i << " repetition " << k << std::endl;
+        datum->setSample(i, j + this->samples*k, datum->getSample(i, j));
+      }
+    }
+  }
+
+  return datum;
+}
+
+audioDatumFourier::~audioDatumFourier()
+{
 }
