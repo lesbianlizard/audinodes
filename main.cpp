@@ -12,11 +12,12 @@ int main(int argc, char* argv[]) {
   std::cout << "instantiating audioDatumFourier" << std::endl;
   audioDatumFourier fourier(50);
   audioDatum* datum = fourier.getTimeDomainSignal(100);
+  audioDatum datum2(*datum);
  // audioDatum* datum = reader.getOutput();
   //datum->print_debug();
 
 	fileWriter writer(argv[2]);
-	writer.setInput(datum);
+	writer.setInput(&datum2);
 	writer.Write();
 
 }

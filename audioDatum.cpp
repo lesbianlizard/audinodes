@@ -75,7 +75,7 @@ audioDatum::~audioDatum() {
 	delete[] this->data;
 }
 
-unsigned int audioDatum::getSamples()
+unsigned int audioDatum::getSamples() const
 {
   return this->samples;
 }
@@ -85,7 +85,7 @@ void audioDatum::setSamples(unsigned int samples)
   this->samples = samples;
 }
 
-unsigned int audioDatum::getSampleRate()
+unsigned int audioDatum::getSampleRate() const
 {
   return this->samplerate;
 }
@@ -95,7 +95,7 @@ void audioDatum::setSampleRate(unsigned int samplerate)
   this->samplerate = samplerate;
 }
 
-int audioDatum::getChannels()
+int audioDatum::getChannels() const
 {
   return this->channels;
 }
@@ -110,7 +110,7 @@ float** audioDatum::getData()
   return this->data;
 }
 
-float audioDatum::getSample(int channel, unsigned int sample_idx)
+float audioDatum::getSample(int channel, unsigned int sample_idx) const
 {
   return this->data[channel][sample_idx];
 }
@@ -120,7 +120,7 @@ void audioDatum::setSample(int channel, unsigned int sample_idx, float sample)
   this->data[channel][sample_idx] = sample;
 }
 
-void audioDatum::print_debug()
+void audioDatum::print_debug() const
 {
   std::string fname = "[audioDatum::print_debug]: ";
   std::cout << fname << "samples " << this->samples << std::endl;

@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string>
 #include <iostream>
+#include "audioDatum.hpp"
 
 
 audioDatumFourier::audioDatumFourier(int samples)

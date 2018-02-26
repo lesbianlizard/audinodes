@@ -16,16 +16,16 @@ class audioDatum {
 		void setLength(const unsigned int samples);
 
 //public:
-    unsigned int getSamples();
+    unsigned int getSamples() const;
     void setSamples(unsigned int samples);
-    unsigned int getSampleRate();
+    unsigned int getSampleRate() const;
     void setSampleRate(unsigned int samplerate);
-    int getChannels();
+    int getChannels() const;
     void setChannels(int channels);
     float** getData(); // is this safe?
-    float getSample(int channel, unsigned int sample_idx);
+    float getSample(int channel, unsigned int sample_idx) const;
     void setSample(int channel, unsigned int sample_idx, float sample);
-    void print_debug(); 
+    void print_debug() const; 
 
 		float* getInterleavedData(void);
 		void putInterleavedData(const float* buf);
