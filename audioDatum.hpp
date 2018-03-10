@@ -18,6 +18,8 @@ class audioDatum {
 
 		void setLength(const unsigned int samples);
 
+    float convolve(std::vector<float> input, std::vector<float> impulse_response, int n, int lower, int upper);
+
 //public:
     unsigned int getSamples() const;
     void setSamples(unsigned int samples);
@@ -32,6 +34,8 @@ class audioDatum {
 
 		float* getInterleavedData(void);
 		void putInterleavedData(const float* buf);
+
+    void applyImpulseResponse(std::vector<float> impulse_response);
 
     friend audioDatum operator+(const audioDatum& datum1, const audioDatum& datum2);
 };
