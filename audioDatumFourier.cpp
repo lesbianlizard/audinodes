@@ -34,18 +34,21 @@ audioDatumFourier::audioDatumFourier(int samples)
 
 void audioDatumFourier::init_data_array()
 {
-  this->data = new std::complex<float>*[this->channels];
+  //this->data = new std::complex<float>*[this->channels];
 
   for (int i = 0; i < this->channels; i++)
   {
-    this->data[i] = new std::complex<float>[this->samples];
+    //this->data[i] = new std::complex<float>[this->samples];
+    std::vector< std::complex<float> > data_tmp(this->samples, 0);
+    this->data.push_back(data_tmp);
   }
 }
 
 audioDatumFourier::audioDatumFourier(audioDatum* datum)
 {
   std::string fname = "[audioDatumFourier::audioDatumFourier(audioDatum* datum)]: ";
-  float** datum_samples = datum->getData();
+  //float** datum_samples = datum->getData();
+  std::vector< std::vector< float > > datum_samples = datum->getData();
   this->samples = datum->getSamples();
   this->channels = datum->getChannels();
 
@@ -62,7 +65,7 @@ audioDatumFourier::audioDatumFourier(audioDatum* datum)
   }
 }
 
-std::complex<float> audioDatumFourier::get_fourier_series_coefficient(float* time_samples, int idx)
+std::complex<float> audioDatumFourier::get_fourier_series_coefficient(std::vector<float>& time_samples, int idx)
 {
   std::complex<float> sum = 0;
 
@@ -70,9 +73,11 @@ std::complex<float> audioDatumFourier::get_fourier_series_coefficient(float* tim
   {
     sum += time_samples[n] * std::exp(static_cast<std::complex<float> >(1i * idx * 2 * M_PI * n / this->samples));
   }
+
+  return sum;
 }
 
-float audioDatumFourier::get_inverse_fourier_series_sample(std::complex<float>* fourier_coefficients, int idx)
+float audioDatumFourier::get_inverse_fourier_series_sample(std::vector<std::complex<float> > fourier_coefficients, int idx)
 {
   std::complex<float> sum = 0; 
 

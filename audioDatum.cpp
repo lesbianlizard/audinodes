@@ -12,11 +12,13 @@ void audioDatum::setLength(const unsigned int samples) {
 	printf("setting channels: %i\n", this->channels);
 	this->samples = samples;
 
-	this->data = new float* [this->channels];
+//	this->data = new float* [this->channels];
 
 	for (int i=0; i<this->channels; i++) {
 		printf("setting track %i samples: %i\n", i, samples);
-		this->data[i] = new float[samples];
+		//this->data[i] = new float[samples];
+    std::vector<float> samples_tmp(samples, 0);
+    this->data.push_back(samples_tmp);
 	}
 }
 
@@ -68,11 +70,11 @@ audioDatum::audioDatum() {
 }
 
 audioDatum::~audioDatum() {
-	printf("deleting audioDatum\n");
-	for (int i=0; i<this->channels; i++) {
-		delete[] this->data[i];
-	}
-	delete[] this->data;
+//	printf("deleting audioDatum\n");
+//	for (int i=0; i<this->channels; i++) {
+//		delete[] this->data[i];
+//	}
+//	delete[] this->data;
 }
 
 unsigned int audioDatum::getSamples() const
@@ -105,7 +107,7 @@ void audioDatum::setChannels(int channels)
   this->channels = channels;
 }
 
-float** audioDatum::getData()
+std::vector< std::vector<float> > audioDatum::getData()
 {
   return this->data;
 }
