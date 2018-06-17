@@ -143,102 +143,30 @@ void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
 {
   int impulse_length = impulse_response.size();
   std::vector< std::vector<float> > data_tmp = this->data; 
-  std::vector< std::vector<int> > conv_err_ct;
 
-  for (int i = 0; i < 5; i++)
-  {
-    std::vector<int> tmp(2, 0);
-    conv_err_ct.push_back(tmp);
-  }
 
   for (int c = 0; c < this->channels; c++)
   { 
+    printf("convolving channel c=%i\n", c);
+
     for (int n = 0; n < this->samples; n++)
     {
-      this->data.at(c).at(n) = 0;
-      //std::cout << "convolving channel " << c << " sample " << n << " of " << this->samples << std::endl;
-
-      // case 0
-      if (n < -impulse_length - samples)
-      {
-        try
-        {
-          this->data.at(c).at(n) = 0;
-          conv_err_ct.at(0).at(0)++;
-        }
-        catch (...)
-        {
-          conv_err_ct.at(0).at(1)++;
-        }
-      }
-      // case 1
-      else if ((n > -impulse_length - samples - 1) && (n < impulse_length - samples))
-      {
-        try
-        {
-          this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, (-samples - n), (impulse_length));
-          conv_err_ct.at(1).at(0)++;
-        }
-        catch (...)
-        {
-          conv_err_ct.at(1).at(1)++;
-        }
-      }
-      // case 2
-      else if ((n > impulse_length - samples - 1) && (n < -impulse_length))
-      {
-        try
-        {
-          this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, (-impulse_length), (impulse_length));
-          conv_err_ct.at(2).at(0)++;
-        }
-        catch (...)
-        {
-          conv_err_ct.at(2).at(1)++;
-        }
-      }
-      // case 3
-      else if ((n > -impulse_length - 1) && (n < impulse_length))
-      {
-        try
-        {
-          this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, (-impulse_length), (-n));
-          conv_err_ct.at(3).at(0)++;
-        }
-        catch (...)
-        {
-          conv_err_ct.at(3).at(1)++;
-        }
-      }
-      // case 4
-      else
-      {
-        try
-        {
-          this->data.at(c).at(n) = 0;
-          conv_err_ct.at(4).at(0)++;
-        }
-        catch (...)
-        {
-          conv_err_ct.at(4).at(1)++;
-        }
-      }
+      printf("convolving channel sample n=%i\n", n);
+      this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
     }
   }
 
-  for (int i = 0; i < 5; i++)
-  {
-    std::cout << "case " <<  i << " hits, misses: " << conv_err_ct.at(i).at(0) << ", " << conv_err_ct.at(i).at(1) << std::endl;
-  }
 }
 
 float audioDatum::convolve(std::vector<float> input, std::vector<float> impulse_response, int n, int lower, int upper)
 {
   float result;
 
-  for (int k = lower; k < upper + 1; k++)
+  for (int i = lower; i < upper + 1; i++)
   {
-    result += impulse_response.at(n + impulse_response.size()) * input.at(n - k);
+    printf("convolving sum i=%i\n, n=%i", i, n);
+    result += impulse_response.at(n - i) * input.at(i);
+    printf("done convolving sum i=%i\n, n=%i", i, n);
   } 
 
   return result;
