@@ -5,6 +5,8 @@
 #include <iostream>
 #include "audioDatum.hpp"
 
+using namespace std::complex_literals;
+
 
 audioDatumFourier::audioDatumFourier(int samples)
 {
@@ -71,7 +73,7 @@ std::complex<float> audioDatumFourier::get_fourier_series_coefficient(std::vecto
 
   for (int n = 0; n < this->samples; n++)
   {
-    sum += time_samples[n] * std::exp(static_cast<std::complex<float> >(1i * idx * 2 * M_PI * n / this->samples));
+    sum += static_cast<float>(time_samples[n]) * std::exp(static_cast<std::complex<float> >(1i) * static_cast<float>(idx * 2 * M_PI * n / this->samples));
   }
 
   return sum;
@@ -83,7 +85,7 @@ float audioDatumFourier::get_inverse_fourier_series_sample(std::vector<std::comp
 
   for (int k = 0; k < this->samples; k++)
   {
-    sum += fourier_coefficients[k] * std::exp(static_cast<std::complex<float> >(1i * k * 2 * M_PI * idx / this->samples));
+    sum += fourier_coefficients[k] * std::exp(static_cast<std::complex<float> >(1i) * static_cast<float>(k * 2 * M_PI * idx / this->samples));
   }
 
   return sum.real();
