@@ -19,13 +19,13 @@ int main(int argc, char* argv[]) {
   //datum->print_debug();
 
   impulseResponse filter;
-  std::vector<float> filter_data = filter.lowpass_filter(100, datum->getSampleRate(), 50);
+  std::vector<float> filter_data = filter.lowpass_filter(1000, datum->getSampleRate(), 250);
  
-//  for (int i = 0; i < filter_data.size(); i++)
-//  {
-//    printf("filter sample %i: %e\n", i, filter_data.at(i));
-//  }
-//  return 0;
+  for (int i = 0; i < filter_data.size(); i++)
+  {
+    printf("filter sample %i: %e\n", i, filter_data.at(i));
+  }
+  //return 0;
 
   datum->applyImpulseResponse(filter_data);
 

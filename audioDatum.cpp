@@ -209,6 +209,8 @@ float audioDatum::convolve2(std::vector<float>& impulse_response, std::vector<fl
   for (int m = 0; m < impulse_response.size(); m++)
   {
     result += impulse_response.at(this->getPeriodicIndex(m, 0, impulse_response.size())) * input.at(this->getPeriodicIndex(n - m, 0, this->samples));
+    //printf("convolution factor 1: %f\n", impulse_response.at(this->getPeriodicIndex(m, 0, impulse_response.size())) );
+    //printf("convolution factor 2: %f\n", input.at(this->getPeriodicIndex(n - m, 0, this->samples)) );
   }
 
   return result;

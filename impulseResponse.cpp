@@ -8,7 +8,14 @@ std::vector<float> impulseResponse::lowpass_filter(int bandwidth, int sample_fre
 
   for (int n = -cutoff; n < cutoff + 1; n++)
   {
-   impulses.push_back(sin(static_cast<float>(bandwidth * n) / sample_freq) / (M_PI * 10));
+    if (n == 0)
+    {
+      impulses.push_back(bandwidth/(sample_freq * M_PI));
+    }
+    else
+    {
+      impulses.push_back(sin(static_cast<float>(bandwidth * n) / sample_freq) / (M_PI * n));
+    }
   }
 
   return impulses;
