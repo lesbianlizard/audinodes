@@ -19,7 +19,15 @@ int main(int argc, char* argv[]) {
   //datum->print_debug();
 
   impulseResponse filter;
-  datum->applyImpulseResponse(filter.lowpass_filter(500, datum->getSampleRate(), 5));
+  std::vector<float> filter_data = filter.lowpass_filter(50, datum->getSampleRate(), 10);
+ 
+//  for (int i = 0; i < filter_data.size(); i++)
+//  {
+//    printf("filter sample %i: %e\n", i, filter_data.at(i));
+//  }
+//  return 0;
+
+  datum->applyImpulseResponse(filter_data);
 
 	fileWriter writer(argv[2]);
 	writer.setInput(datum);
