@@ -151,9 +151,10 @@ void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
 
     for (int n = 0; n < this->samples; n++)
     {
-      this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
+   //   this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
+      this->data.at(c).at(n) = this->convolve2(impulse_response, data_tmp.at(c), n);
 
-      if (n%1000 == 0)
+      if (n % 1000 == 0)
       {
         printf("convolving channel %i sample n=%i\n", c, n);
         printf("old sample %i = %f\n", n, data_tmp.at(c).at(n));
@@ -197,6 +198,18 @@ float audioDatum::convolve(std::vector<float> input, std::vector<float> impulse_
 //    printf("factor 2: %e\n", input.at(this->getPeriodicIndex(i, 0, this->samples)));
 //    printf("convolution result: %e\n", result);
   } 
+
+  return result;
+}
+
+float audioDatum::convolve2(std::vector<float> impulse_response, std::vector<float> input, int n)
+{
+  float result = 0;
+
+  for (int m = 0; m < impulse_response.size(); m++)
+  {
+    result += impulse_response.at(this->getPeriodicIndex(m, 0, impulse_response.size())) * input.at(this->getPeriodicIndex(n - m, 0, this->samples));
+  }
 
   return result;
 }

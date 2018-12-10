@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
   //datum->print_debug();
 
   impulseResponse filter;
-  std::vector<float> filter_data = filter.lowpass_filter(50, datum->getSampleRate(), 10);
+  std::vector<float> filter_data = filter.lowpass_filter(100, datum->getSampleRate(), 50);
  
 //  for (int i = 0; i < filter_data.size(); i++)
 //  {
