@@ -202,7 +202,7 @@ float audioDatum::convolve(std::vector<float> input, std::vector<float> impulse_
   return result;
 }
 
-float audioDatum::convolve2(std::vector<float> impulse_response, std::vector<float> input, int n)
+float audioDatum::convolve2(std::vector<float>& impulse_response, std::vector<float>& input, int n)
 {
   float result = 0;
 

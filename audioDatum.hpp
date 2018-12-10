@@ -19,7 +19,7 @@ class audioDatum {
 		void setLength(const unsigned int samples);
 
     float convolve(std::vector<float> input, std::vector<float> impulse_response, int n, int lower, int upper);
-    float convolve2(std::vector<float> impulse_response, std::vector<float> input, int n);
+    float convolve2(std::vector<float>& impulse_response, std::vector<float>& input, int n);
 
 //public:
     unsigned int getSamples() const;
