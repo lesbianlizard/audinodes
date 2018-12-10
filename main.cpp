@@ -5,6 +5,7 @@
 //#include "audioDatumFourier.hpp"
 #include "audioDatum.hpp"
 #include "impulseResponse.hpp"
+#include <cmath>
 
 int main(int argc, char* argv[]) {
 
@@ -19,13 +20,15 @@ int main(int argc, char* argv[]) {
   //datum->print_debug();
 
   impulseResponse filter;
-  std::vector<float> filter_data = filter.lowpass_filter(1000, datum->getSampleRate(), 250);
+  //std::vector<float> filter_data = filter.lowpass_filter(1000, datum->getSampleRate(), 25);
+  //std::vector<float> filter_data = filter.highpass_filter(5000, datum->getSampleRate(), 25);
+  std::vector<float> filter_data = filter.bandpass_filter(10000, 20000, datum->getSampleRate(), 1000);
  
   for (int i = 0; i < filter_data.size(); i++)
   {
     printf("filter sample %i: %e\n", i, filter_data.at(i));
   }
-  //return 0;
+ // return 0;
 
   datum->applyImpulseResponse(filter_data);
 
