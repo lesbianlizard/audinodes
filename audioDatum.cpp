@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <thread>
+#include <cmath>
 
 
 audioDatum operator+(const audioDatum& datum1, const audioDatum& datum2)
@@ -139,29 +141,86 @@ void audioDatum::print_debug() const
   }
 }
 
+void audioDatum::applyImpulseResponseThread(std::vector<float>& data_tmp, std::vector<float>& data, std::vector<float>& impulse_response, int thread, int thread_lower, int thread_upper)
+{
+  int pct_done = 0;
+  for (int n = thread_lower; n < thread_upper + 1; n++)
+  {
+    //   this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
+    data.at(n) = this->convolve2(impulse_response, data_tmp, n);
+
+    if ( std::floor(100 * static_cast<double>(n) / (thread_upper - thread_lower)) == pct_done)
+    {
+      printf("Thread %i %i%% done.\n", thread, pct_done);
+      pct_done += 10;
+    }
+
+  }
+}
+
 void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
 {
   int impulse_length = impulse_response.size();
   std::vector< std::vector<float> > data_tmp = this->data; 
+  int n_threads = 8;
+  int thread_lower = 0;
+  int thread_upper = -1;
+  //int test_n_samples = 5;
+  std::vector<std::thread> threads;
+  std::vector<int> thread_bins;
+  int bin_remainder = this->samples % n_threads; 
+  int bin_size = (this->samples - bin_remainder) / n_threads;
+
+  for (int i = 0; i < n_threads; i++)
+  {
+    thread_bins.push_back(bin_size);
+  }
+  
+  thread_bins.at(0) += bin_remainder;
+//  printf("grew bin 0 to %i\n", thread_bins.at(0));
+
+//  int bins_total = 0;
+//  for (int i = 0; i < n_threads; i++)
+//  {
+//    bins_total += thread_bins.at(i);
+//  }
+//  printf("bins_total: %i\n", bins_total);
 
 
   for (int c = 0; c < this->channels; c++)
   { 
     printf("convolving channel c=%i\n", c);
 
-    for (int n = 0; n < this->samples; n++)
+    for (int thread = 0; thread < n_threads ; thread++)
     {
-   //   this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
-      this->data.at(c).at(n) = this->convolve2(impulse_response, data_tmp.at(c), n);
-
-      if (n % 1000 == 0)
-      {
-        printf("convolving channel %i sample n=%i\n", c, n);
-        printf("old sample %i = %f\n", n, data_tmp.at(c).at(n));
-        printf("new sample %i = %f\n", n, this->data.at(c).at(n));
-      }
-
+      thread_upper += thread_bins.at(thread);
+      printf("thread %i lower: %i,\tupper:%i\n", thread, thread_lower, thread_upper);
+      threads.push_back(std::thread((this->applyImpulseResponseThread), data_tmp, this->data.at(c), impulse_response, thread_lower, thread_upper)); 
+      thread_lower += thread_bins.at(thread);
     }
+    exit; 
+
+    for (int thread = 0; thread < n_threads; thread++)
+    {
+      //threads.at(thread).join();
+      printf("Thread %i finished\n", thread);
+    }
+
+
+
+//    for (int n = 0; n < this->samples; n++)
+//    {
+//   //   this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
+//      this->data.at(c).at(n) = this->convolve2(impulse_response, data_tmp.at(c), n);
+//
+//      if (n % 1000 == 0)
+//      {
+//        printf("convolving channel %i sample n=%i\n", c, n);
+//        printf("old sample %i = %f\n", n, data_tmp.at(c).at(n));
+//        printf("new sample %i = %f\n", n, this->data.at(c).at(n));
+//      }
+//
+//    }
     printf("done convolving channel c=%i\n", c);
   }
 

@@ -37,6 +37,7 @@ class audioDatum {
 		void putInterleavedData(const float* buf);
 
     void applyImpulseResponse(std::vector<float> impulse_response);
+    static void applyImpulseResponseThread(std::vector<float>& data_tmp, std::vector<float>& data, std::vector<float>& impulse_response, int thread, int thread_lower, int thread_upper);
 
     int getPeriodicIndex(int input, int idx_low, int idx_high);
 
