@@ -37,6 +37,8 @@ class audioDatum {
 
     void applyImpulseResponse(std::vector<float> impulse_response);
 
+    int getPeriodicIndex(int input, int idx_low, int idx_high);
+
     friend audioDatum operator+(const audioDatum& datum1, const audioDatum& datum2);
 };
 

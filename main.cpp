@@ -2,7 +2,8 @@
 #include <iostream>
 #include "fileReader.hpp"
 #include "fileWriter.hpp"
-#include "audioDatumFourier.hpp"
+//#include "audioDatumFourier.hpp"
+#include "audioDatum.hpp"
 #include "impulseResponse.hpp"
 
 int main(int argc, char* argv[]) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
   //datum->print_debug();
 
   impulseResponse filter;
-  datum->applyImpulseResponse(filter.lowpass_filter(500, datum->getSampleRate(), 2500));
+  datum->applyImpulseResponse(filter.lowpass_filter(500, datum->getSampleRate(), 5));
 
 	fileWriter writer(argv[2]);
 	writer.setInput(datum);

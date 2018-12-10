@@ -151,22 +151,41 @@ void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
 
     for (int n = 0; n < this->samples; n++)
     {
-      printf("convolving channel sample n=%i\n", n);
+      printf("convolving channel %i sample n=%i\n", c, n);
       this->data.at(c).at(n) = this->convolve(data_tmp.at(c), impulse_response, n, -impulse_length + 1 , impulse_length - 1);
     }
+    printf("done convolving channel c=%i\n", c);
   }
 
 }
 
+int audioDatum::getPeriodicIndex(int input, int idx_low, int idx_high)
+{
+  if ((input >= idx_low) && (input <= idx_high))
+  {
+    return input;
+  }
+  else if (input < idx_low)
+  {
+    return this->getPeriodicIndex(idx_high - (idx_low - input), idx_low, idx_high);
+  }
+  else if (input > idx_high)
+  {
+    return this->getPeriodicIndex(idx_low + (input - idx_high), idx_low, idx_high);
+  }
+}
+
 float audioDatum::convolve(std::vector<float> input, std::vector<float> impulse_response, int n, int lower, int upper)
 {
+//  printf("audioDatum::convolve start\n");
+  //printf("lower: %i, upper: %i\n", lower, upper);
   float result;
 
   for (int i = lower; i < upper + 1; i++)
   {
-    printf("convolving sum i=%i\n, n=%i", i, n);
-    result += impulse_response.at(n - i) * input.at(i);
-    printf("done convolving sum i=%i\n, n=%i", i, n);
+    //printf("convolving sum i=%i, n=%i\n", i, n);
+    //printf("result += impulse_response.at(%i) * input.at(%i)\n", this->getPeriodicIndex(n - i, 0, upper), this->getPeriodicIndex(i, 0, this->samples));
+    result += impulse_response.at(this->getPeriodicIndex(n - i, 0, upper)) * input.at(this->getPeriodicIndex(i, 0, this->samples));
   } 
 
   return result;
