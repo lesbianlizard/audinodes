@@ -141,7 +141,7 @@ void audioDatum::print_debug() const
   }
 }
 
-void audioDatum::applyImpulseResponseThread(std::vector<float>& data_tmp, std::vector<float>& data, std::vector<float>& impulse_response, int thread, int thread_lower, int thread_upper)
+void audioDatum::applyImpulseResponseThread(std::vector<float>& data_tmp, std::vector<float>& data, std::vector<float>& impulse_response, int thread_n, int thread_lower, int thread_upper)
 {
   int pct_done = 0;
   for (int n = thread_lower; n < thread_upper + 1; n++)
@@ -151,7 +151,7 @@ void audioDatum::applyImpulseResponseThread(std::vector<float>& data_tmp, std::v
 
     if ( std::floor(100 * static_cast<double>(n) / (thread_upper - thread_lower)) == pct_done)
     {
-      printf("Thread %i %i%% done.\n", thread, pct_done);
+      printf("Thread %i %i%% done.\n", thread_n, pct_done);
       pct_done += 10;
     }
 
@@ -191,12 +191,12 @@ void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
   { 
     printf("convolving channel c=%i\n", c);
 
-    for (int thread = 0; thread < n_threads ; thread++)
+    for (int thread_n = 0; thread_n < n_threads ; thread_n++)
     {
-      thread_upper += thread_bins.at(thread);
-      printf("thread %i lower: %i,\tupper:%i\n", thread, thread_lower, thread_upper);
-      threads.push_back(std::thread((&audioDatum::applyImpulseResponseThread), this, data_tmp, this->data.at(c), impulse_response, thread_lower, thread_upper)); 
-      thread_lower += thread_bins.at(thread);
+      thread_upper += thread_bins.at(thread_n);
+      printf("thread %i lower: %i,\tupper:%i\n", thread_n, thread_lower, thread_upper);
+      threads.push_back(std::thread((&audioDatum::applyImpulseResponseThread), this, std::ref(data_tmp.at(c)), std::ref(data.at(c)), std::ref(impulse_response), thread_n, thread_lower, thread_upper)); 
+      thread_lower += thread_bins.at(thread_n);
     }
     exit; 
 
