@@ -1,6 +1,6 @@
 SRC=$(wildcard *.cpp)
 OBJ=$(SRC:.cpp=.o)
-FLAGS=-Wall -g -fdiagnostics-color=auto
+FLAGS=-Wall -g -pthread -fdiagnostics-color=auto
 LIBS=-lsndfile
 BINNAME=audinodes
 
