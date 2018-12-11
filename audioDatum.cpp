@@ -195,7 +195,7 @@ void audioDatum::applyImpulseResponse(std::vector<float> impulse_response)
     {
       thread_upper += thread_bins.at(thread);
       printf("thread %i lower: %i,\tupper:%i\n", thread, thread_lower, thread_upper);
-      threads.push_back(std::thread((this->applyImpulseResponseThread), data_tmp, this->data.at(c), impulse_response, thread_lower, thread_upper)); 
+      threads.push_back(std::thread((&audioDatum::applyImpulseResponseThread), this, data_tmp, this->data.at(c), impulse_response, thread_lower, thread_upper)); 
       thread_lower += thread_bins.at(thread);
     }
     exit; 
